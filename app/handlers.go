@@ -1,6 +1,7 @@
 package app
 
 import (
+	"database/sql"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -47,7 +48,13 @@ func GetNews(w http.ResponseWriter, r *http.Request) {
 
 	id := utils.PathParamInt(r, "id")
 	news, err := app.db.GetNews(id)
-	if err != nil {
+
+	switch err {
+	case nil: // ok
+	case sql.ErrNoRows:
+		responseJson(w, http.StatusNotFound, ApiResponse{ErrNotFound, "News not found", nil})
+		return
+	default:
 		log.Printf("error: %v", err)
 		responseJson(w, http.StatusInternalServerError, ApiResponse{ErrInternal, "Get news error", nil})
 		return
@@ -67,12 +74,18 @@ func UpdateNews(w http.ResponseWriter, r *http.Request) {
 	}
 
 	id, err := app.db.UpdateNews(newsInput)
-	if err != nil {
+
+	switch err {
+	case nil: // ok
+	case sql.ErrNoRows:
+		responseJson(w, http.StatusNotFound, ApiResponse{ErrNotFound, "News not found", nil})
+		return
+	default:
 		log.Printf("error: %v", err)
 		responseJson(w, http.StatusInternalServerError, ApiResponse{ErrInternal, "Update news error", nil})
 		return
-
 	}
+
 	responseJson(w, 200, ApiResponse{Ok, "", id})
 }
 
@@ -100,7 +113,13 @@ func GetComment(w http.ResponseWriter, r *http.Request) {
 
 	id := utils.PathParamInt(r, "id")
 	comment, err := app.db.GetComment(id)
-	if err != nil {
+
+	switch err {
+	case nil: // ok
+	case sql.ErrNoRows:
+		responseJson(w, http.StatusNotFound, ApiResponse{ErrNotFound, "Comment not found", nil})
+		return
+	default:
 		log.Printf("error: %v", err)
 		responseJson(w, http.StatusInternalServerError, ApiResponse{ErrInternal, "Get comment error", nil})
 		return
@@ -134,12 +153,18 @@ func UpdateComment(w http.ResponseWriter, r *http.Request) {
 	}
 
 	id, err := app.db.UpdateComment(commentInput)
-	if err != nil {
+
+	switch err {
+	case nil: // ok
+	case sql.ErrNoRows:
+		responseJson(w, http.StatusNotFound, ApiResponse{ErrNotFound, "Comment not found", nil})
+		return
+	default:
 		log.Printf("error: %v", err)
 		responseJson(w, http.StatusInternalServerError, ApiResponse{ErrInternal, "Update comment error", nil})
 		return
-
 	}
+
 	responseJson(w, 200, ApiResponse{Ok, "", id})
 
 }
@@ -148,11 +173,18 @@ func DeleteComment(w http.ResponseWriter, r *http.Request) {
 
 	id := utils.PathParamInt(r, "id")
 	err := app.db.DeleteComment(id)
-	if err != nil {
+
+	switch err {
+	case nil: // ok
+	case sql.ErrNoRows:
+		responseJson(w, http.StatusNotFound, ApiResponse{ErrNotFound, "Comment not found", nil})
+		return
+	default:
 		log.Printf("error: %v", err)
 		responseJson(w, http.StatusInternalServerError, ApiResponse{ErrInternal, "Delete comment error", nil})
 		return
 	}
+
 	responseJson(w, 200, ApiResponse{Ok, "", nil})
 }
 
@@ -181,7 +213,13 @@ func GetAuthor(w http.ResponseWriter, r *http.Request) {
 
 	id := utils.PathParamInt(r, "id")
 	author, err := app.db.GetAuthor(id)
-	if err != nil {
+
+	switch err {
+	case nil: // ok
+	case sql.ErrNoRows:
+		responseJson(w, http.StatusNotFound, ApiResponse{ErrNotFound, "Author not found", nil})
+		return
+	default:
 		log.Printf("error: %v", err)
 		responseJson(w, http.StatusInternalServerError, ApiResponse{ErrInternal, "Get author error", nil})
 		return
@@ -213,12 +251,18 @@ func UpdateAuthor(w http.ResponseWriter, r *http.Request) {
 	}
 
 	id, err := app.db.UpdateAuthor(author)
-	if err != nil {
+
+	switch err {
+	case nil: // ok
+	case sql.ErrNoRows:
+		responseJson(w, http.StatusNotFound, ApiResponse{ErrNotFound, "Author not found", nil})
+		return
+	default:
 		log.Printf("error: %v", err)
 		responseJson(w, http.StatusInternalServerError, ApiResponse{ErrInternal, "Update author error", nil})
 		return
-
 	}
+
 	responseJson(w, 200, ApiResponse{Ok, "", id})
 
 }
@@ -227,11 +271,18 @@ func DeleteAuthor(w http.ResponseWriter, r *http.Request) {
 
 	id := utils.PathParamInt(r, "id")
 	err := app.db.DeleteAuthor(id)
-	if err != nil {
+
+	switch err {
+	case nil: // ok
+	case sql.ErrNoRows:
+		responseJson(w, http.StatusNotFound, ApiResponse{ErrNotFound, "Author not found", nil})
+		return
+	default:
 		log.Printf("error: %v", err)
 		responseJson(w, http.StatusInternalServerError, ApiResponse{ErrInternal, "Delete author error", nil})
 		return
 	}
+
 	responseJson(w, 200, ApiResponse{Ok, "", nil})
 
 }

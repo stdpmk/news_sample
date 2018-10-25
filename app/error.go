@@ -16,6 +16,7 @@ const (
 	Ok             string = ""
 	ErrInvalidJson string = "invalid_json"
 	ErrInternal    string = "internal"
+	ErrNotFound    string = "not_found"
 )
 
 func responseJson(w http.ResponseWriter, httpCode int, obj ApiResponse) {
